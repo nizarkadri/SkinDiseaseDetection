@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<head>
+    <title>upload</title>
+    
+</head>
+<body>
+    <input type="file" id="image" onchange="previewFile()"><br>
+    <img src="" height="200" alt="Image preview...">
+
+    <button id="detect" onclick="detectPage()">Detect Disease</button>
+    
+<script>
+var b64 = "";
+function previewFile() {
+  const preview = document.querySelector('img');
+  const file = document.querySelector('input[type=file]').files[0];
+  const reader = new FileReader();
+
+  reader.addEventListener("load", function () {
+    // convert image file to base64 string
+      preview.src = reader.result;
+      localStorage.setItem("imageSRC",preview.src);
+      b64 = reader.result;
+  }, false);
+
+  if (file) {
+    reader.readAsDataURL(file);
+    }
+    
+}
+
+
+function detectPage()
+{
+     url = `http://${window.location.host}/saveImage`
+    
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({"image":b64});
+
+    var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+    };
+    console.log("calling api");
+    fetch(url, requestOptions)
+        .then(response => response.text())
+        .then(result => console.log("post request"+result))
+        .catch(error => console.log('error', error));
+    window.open(`http://${window.location.host}/detect`, '__self');
+}
+
+</script>
+    
+</body>
+</html>

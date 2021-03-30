@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- basic -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- mobile metas -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+<!-- site metas -->
+<title>Skin disease detection</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">	
+<!-- bootstrap css -->
+<link rel="stylesheet" type="text/css" href="/homecss/bootstrap.min.css">
+<!-- style css -->
+<link rel="stylesheet" type="text/css" href="/homecss/style.css">
+<!-- Responsive-->
+<link rel="stylesheet" href="/homecss/responsive.css">
+<!-- fevicon -->
+<link rel="icon" href="images/fevicon.png" type="image/gif" />
+<!-- Scrollbar Custom CSS -->
+<link rel="stylesheet" href="/homecss/jquery.mCustomScrollbar.min.css">
+<!-- Tweaks for older IEs-->
+<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+<!-- owl stylesheets --> 
+<link rel="stylesheet" href="/homecss/owl.carousel.min.css">
+<link rel="stylesheet" href="homecss/owl.theme.default.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+
+</head>
+<body>
+	<!-- section banner start -->
+	<div class="header_section">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-4">
+					<div><a href="index.html"><img src="/photos/logo.png" height="100px" width="150px" ></a></div>
+				</div>
+				
+			</div>
+		</div>
+		<div class="banner_main">
+			<div class="container">
+				<div class="ram">
+					<div class="row">
+					    <div class="col-sm-12">
+						    <h1 class="taital">CURE IT BEFORE ITS TOO LATE</h1>
+						    <p class="consectetur_text">Know about your skin disease by uploading image of an infected part</p>
+						    <div class="banner_bt" style="float:left;">
+								<input type="file" id="image" style="margin-left: 30px;" onchange="previewFile()">
+						    </div>
+							<div class="banner_bt">
+								<button style="float:left;margin-left: 30px;" id="detect" onclick="detectPage()">Detect Disease</button>
+						    </div>
+					    </div>
+				    </div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<!-- section banner end -->
+	
+
+    <!-- Javascript files-->
+	<script>
+var b64 = "";
+function previewFile() {
+  const preview = document.querySelector('img');
+  const file = document.querySelector('input[type=file]').files[0];
+  const reader = new FileReader();
+
+  reader.addEventListener("load", function () {
+    // convert image file to base64 string
+     // preview.src = reader.result;
+      localStorage.setItem("imageSRC",reader.result);
+      b64 = reader.result;
+  }, false);
+
+  if (file) {
+    reader.readAsDataURL(file);
+    }
+    
+}
+
+
+function detectPage()
+{
+     url = `http://${window.location.host}/saveImage`
+    
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({"image":b64});
+
+    var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+    };
+    console.log("calling api");
+    fetch(url, requestOptions)
+        .then(response => response.text())
+        .then(result => console.log("post request"+result))
+        .catch(error => console.log('error', error));
+    window.open(`http://${window.location.host}/detect`, '__self');
+}
+
+</script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+      <script src="js/jquery-3.0.0.min.js"></script>
+      <script src="js/plugin.js"></script>
+      <!-- sidebar -->
+      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+      <script src="js/custom.js"></script>
+      <!-- javascript --> 
+      <script src="js/owl.carousel.js"></script>
+      <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+      
+
+
+  
+     
+</body>
+</html>
